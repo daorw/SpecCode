@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { SettingsDialog, ProvidersModelsTab, ProxyTab, ApiKeysTab } from '@mariozechner/pi-web-ui';
+import { useState, useCallback } from 'react';
 import type { Project } from '@/lib/db/schema';
 
 interface NavBarProps {
@@ -34,12 +33,9 @@ export function NavBar({
   const [newDesc, setNewDesc] = useState('');
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
-  const openSettings = useCallback(() => {
-    SettingsDialog.open([
-      new ProvidersModelsTab(),
-      new ApiKeysTab(),
-      new ProxyTab(),
-    ]);
+  const openSettings = useCallback(async () => {
+    const { SettingsDialog, ProvidersModelsTab, ApiKeysTab, ProxyTab } = await import('@mariozechner/pi-web-ui');
+    SettingsDialog.open([new ProvidersModelsTab(), new ApiKeysTab(), new ProxyTab()]);
   }, []);
 
   const handleAdd = async () => {

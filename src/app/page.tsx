@@ -4,12 +4,16 @@ import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { DocEditor } from '@/components/doc/doc-editor';
 import { VersionBar } from '@/components/doc/version-bar';
-import { NavBar } from '@/components/chat/nav-bar';
 import type { Agent } from '@mariozechner/pi-agent-core';
 import type { Requirement, VersionRecord, Project } from '@/lib/db/schema';
 
 const ChatPanelWrapper = dynamic(
   () => import('@/components/chat/chat-panel').then(mod => ({ default: mod.ChatPanelWrapper })),
+  { ssr: false }
+);
+
+const NavBar = dynamic(
+  () => import('@/components/chat/nav-bar').then(mod => ({ default: mod.NavBar })),
   { ssr: false }
 );
 
