@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'speccode — 需求驱动开发工具',
-  description: '以需求文档为唯一开发入口的智能编程工具',
+  title: 'SpecCode - Requirement Analysis-Driven Programming Agent',
+  description: 'Requirement-driven development tool — generate code from spec documents',
+  icons: { icon: '/favicon.svg' },
 };
 
 export default function RootLayout({
