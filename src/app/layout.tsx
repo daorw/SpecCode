@@ -13,6 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
+      <head>
+        <link rel="stylesheet" href="/pi-web-ui/app.css" />
+      </head>
       <body className="h-screen overflow-hidden">
         {children}
       </body>

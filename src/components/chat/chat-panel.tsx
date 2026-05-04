@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import { Agent } from '@mariozechner/pi-agent-core';
 import { ChatPanel, AppStorage, IndexedDBStorageBackend, SettingsStore, ProviderKeysStore, SessionsStore, CustomProvidersStore, setAppStorage, defaultConvertToLlm, ApiKeyPromptDialog } from '@mariozechner/pi-web-ui';
-import '@mariozechner/pi-web-ui/app.css';
 
 interface ChatPanelWrapperProps {
   agent: Agent;

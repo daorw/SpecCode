@@ -1,12 +1,16 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { createAgent } from '@/lib/agent/create-agent';
-import { ChatPanelWrapper } from '@/components/chat/chat-panel';
+import dynamic from 'next/dynamic';
 import { DocEditor } from '@/components/doc/doc-editor';
 import { VersionBar } from '@/components/doc/version-bar';
 import type { Agent } from '@mariozechner/pi-agent-core';
 import type { Requirement, VersionRecord } from '@/lib/db/schema';
+
+const ChatPanelWrapper = dynamic(
+  () => import('@/components/chat/chat-panel').then(mod => ({ default: mod.ChatPanelWrapper })),
+  { ssr: false }
+);
 
 export default function Home() {
   const [agent, setAgent] = useState<Agent | null>(null);
@@ -18,6 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     const init = async () => {
+      const { createAgent } = await import('@/lib/agent/create-agent');
       const a = createAgent();
       setAgent(a);
 

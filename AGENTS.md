@@ -26,10 +26,11 @@ speccode 是一款**需求驱动开发工具**。用户编写 Markdown 需求文
 
 ```
 speccode/
-├── .agents/                  # 内置 Agent 资源（skill、tool、workflow）
+├── .agents/                  # 内置 Agent 资源（skill、tool、workflow、todo）
 │   ├── skills/               # Agent 内置技能定义
 │   ├── tools/                # Agent 内置工具定义
-│   └── workflows/            # Agent 工作流定义
+│   ├── workflows/            # Agent 工作流定义
+│   └── todo/                 # 待完善工作清单
 ├── src/                      # 源代码
 │   ├── app/                  # Next.js App Router（页面 + API Routes）
 │   ├── components/           # React 组件
@@ -58,6 +59,19 @@ speccode/
 ### 版本孪生
 
 需求文档版本号 ↔ Git tag ↔ 代码提交哈希，三者绑定。修改需求文档 → 新版本号 → Agent 创建 Git 分支增量修改代码 → 用户确认 merge → tag 回写。
+
+## 工作流规范
+
+Agent 在收到以下类型的用户请求时，必须先加载对应的工作流文件，并严格遵循其中定义的步骤顺序和规则：
+
+| 用户意图 | 加载工作流 | 文件路径 |
+|----------|-----------|----------|
+| 新增功能、实现需求、扩展模块 | feature-develop | `.agents/workflows/feature-develop.md` |
+| 调试 bug、定位报错、排查异常 | feature-debug | `.agents/workflows/feature-debug.md` |
+| 编写测试、运行测试、覆盖率 | feature-test | `.agents/workflows/feature-test.md` |
+| 任何功能变更完成后 | documents-update | `.agents/workflows/documents-update.md` |
+
+每个工作流文件包含：适用场景、标准化步骤、自检清单、交付标准。
 
 ## 关键依赖
 
@@ -155,8 +169,11 @@ document.body.appendChild(chatPanel);
   - `generate_code` — 触发代码生成
   - `version_control` — Git 版本管理
 - `workflows/` — Agent 工作流。定义多步骤编排流程：
-  - `main` — 需求确认 → 代码生成 → 版本迭代
-  - `iterate` — 版本增量更新
+  - `feature-develop.md` — 新增功能、实现需求的标准流程
+  - `feature-debug.md` — 缺陷定位与修复的系统化流程
+  - `feature-test.md` — 测试规范、覆盖率要求与 mock 策略
+  - `documents-update.md` — 文档同步更新规则（REQUIREMENTS.md / AGENTS.md / todo/）
+- `todo/` — 待完善工作清单。每个 todo 一个 Markdown 文件，描述待解决的问题和方案。
 
 开发新能力时，优先考虑写入 `.agents/` 而非硬编码到 `src/lib/agent/`。
 
