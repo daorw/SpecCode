@@ -16,6 +16,15 @@ export interface VersionRecord {
   created_at: string;
 }
 
+export interface Project {
+  id: string;
+  name: string;
+  path: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export const DB_SCHEMA = `
 CREATE TABLE IF NOT EXISTS requirements (
   id TEXT PRIMARY KEY,
@@ -38,6 +47,15 @@ CREATE TABLE IF NOT EXISTS versions (
 CREATE TABLE IF NOT EXISTS agent_sessions (
   id TEXT PRIMARY KEY,
   title TEXT NOT NULL DEFAULT '',
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS projects (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  path TEXT NOT NULL UNIQUE,
+  description TEXT NOT NULL DEFAULT '',
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );

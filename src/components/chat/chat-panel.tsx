@@ -46,6 +46,12 @@ export function ChatPanelWrapper({ agent }: ChatPanelWrapperProps) {
         onApiKeyRequired: (provider: string) => ApiKeyPromptDialog.prompt(provider),
       });
 
+      if (chatPanel.agentInterface) {
+        chatPanel.agentInterface.enableModelSelector = true;
+        chatPanel.agentInterface.enableThinkingSelector = true;
+        chatPanel.agentInterface.showThemeToggle = true;
+      }
+
       if (containerRef.current) {
         containerRef.current.innerHTML = '';
         containerRef.current.appendChild(chatPanel);

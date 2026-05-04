@@ -30,6 +30,14 @@ export function createAgent(options: CreateAgentOptions = {}): Agent {
         .filter((m) => ['user', 'assistant', 'toolResult'].includes(m.role))
         .map((m) => m as unknown as Message);
     },
+    getApiKey: async (providerName: string) => {
+      try {
+        const { getAppStorage } = await import('@mariozechner/pi-web-ui');
+        return await getAppStorage().providerKeys.get(providerName) || undefined;
+      } catch {
+        return undefined;
+      }
+    },
   });
 
   return agent;

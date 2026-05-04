@@ -4,8 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { DocEditor } from '@/components/doc/doc-editor';
 import { VersionBar } from '@/components/doc/version-bar';
+import { NavBar } from '@/components/chat/nav-bar';
 import type { Agent } from '@mariozechner/pi-agent-core';
-import type { Requirement, VersionRecord } from '@/lib/db/schema';
+import type { Requirement, VersionRecord, Project } from '@/lib/db/schema';
 
 const ChatPanelWrapper = dynamic(
   () => import('@/components/chat/chat-panel').then(mod => ({ default: mod.ChatPanelWrapper })),
@@ -19,6 +20,8 @@ export default function Home() {
   const [versions, setVersions] = useState<VersionRecord[]>([]);
   const [docContent, setDocContent] = useState('');
   const [loaded, setLoaded] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -53,6 +56,17 @@ export default function Home() {
         // No doc yet
       }
 
+      try {
+        const pRes = await fetch('/api/projects');
+        const pData = await pRes.json();
+        setProjects(pData.projects || []);
+        if (pData.projects?.length > 0) {
+          setActiveProjectId(pData.projects[0].id);
+        }
+      } catch {
+        // No projects yet
+      }
+
       setLoaded(true);
     };
 
@@ -82,6 +96,27 @@ export default function Home() {
     setDocContent(md);
   }, []);
 
+  const handleAddProject = useCallback(async (name: string, path: string, description: string) => {
+    const res = await fetch('/api/projects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, path, description }),
+    });
+    const data = await res.json();
+    if (data.project) {
+      setProjects(prev => [data.project, ...prev]);
+      setActiveProjectId(data.project.id);
+    }
+  }, []);
+
+  const handleDeleteProject = useCallback(async (id: string) => {
+    await fetch(`/api/projects?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+    setProjects(prev => prev.filter(p => p.id !== id));
+    if (activeProjectId === id) {
+      setActiveProjectId(null);
+    }
+  }, [activeProjectId]);
+
   if (!loaded || !agent) {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-50">
@@ -108,11 +143,19 @@ export default function Home() {
           />
         </div>
 
-        <div className="w-1/2 min-w-0 flex flex-col">
+        <div className="flex-1 min-w-0 flex flex-col">
           <div className="flex-1">
             <ChatPanelWrapper agent={agent} />
           </div>
         </div>
+
+        <NavBar
+          projects={projects}
+          activeProjectId={activeProjectId}
+          onSelectProject={setActiveProjectId}
+          onAddProject={handleAddProject}
+          onDeleteProject={handleDeleteProject}
+        />
       </div>
     </div>
   );

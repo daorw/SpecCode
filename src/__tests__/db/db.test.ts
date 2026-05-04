@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { getInMemoryDb } from '@/lib/db/connection';
 import { upsertRequirement, getRequirement, getAllRequirements, getRequirementsByStatus, updateRequirementStatus, deleteRequirement, getRequirementsMarkdown } from '@/lib/db/requirements-dao';
 import { createVersionRecord, getLatestVersion, getVersionByVersion, getAllVersions } from '@/lib/db/versions-dao';
+import { createProject, getProject, getProjectByPath, getAllProjects, updateProject, deleteProject } from '@/lib/db/projects-dao';
 
 describe('Requirements DAO', () => {
   it('should upsert a new requirement', () => {
@@ -163,5 +164,62 @@ describe('Versions DAO', () => {
     const all = getAllVersions(db);
     expect(all.length).toBe(2);
     expect(all[0].version).toBe('2.0.0');
+  });
+});
+
+describe('Projects DAO', () => {
+  it('should create a project', () => {
+    const db = getInMemoryDb();
+    const p = createProject({ name: 'My Project', path: '/home/user/my-project' }, db);
+    expect(p.name).toBe('My Project');
+    expect(p.path).toBe('/home/user/my-project');
+    expect(p.id).toBeTruthy();
+  });
+
+  it('should get project by id', () => {
+    const db = getInMemoryDb();
+    const created = createProject({ name: 'Test', path: '/tmp/test' }, db);
+    const p = getProject(created.id, db);
+    expect(p?.name).toBe('Test');
+  });
+
+  it('should get project by path', () => {
+    const db = getInMemoryDb();
+    createProject({ name: 'P1', path: '/a/b' }, db);
+    const p = getProjectByPath('/a/b', db);
+    expect(p?.name).toBe('P1');
+  });
+
+  it('should get all projects sorted by updated_at desc', () => {
+    const db = getInMemoryDb();
+    createProject({ name: 'Old', path: '/old', description: '' }, db);
+    // Explicitly update Old project to set an older timestamp
+    db.prepare("UPDATE projects SET updated_at = '2020-01-01T00:00:00Z' WHERE path = '/old'").run();
+    createProject({ name: 'New', path: '/new', description: '' }, db);
+    const all = getAllProjects(db);
+    expect(all.length).toBe(2);
+    expect(all[0].name).toBe('New');
+  });
+
+  it('should update a project', () => {
+    const db = getInMemoryDb();
+    const created = createProject({ name: 'Original', path: '/original' }, db);
+    const updated = updateProject(created.id, { name: 'Updated' }, db);
+    expect(updated?.name).toBe('Updated');
+    expect(updated?.path).toBe('/original');
+  });
+
+  it('should delete a project', () => {
+    const db = getInMemoryDb();
+    const created = createProject({ name: 'Delete Me', path: '/delete' }, db);
+    deleteProject(created.id, db);
+    const p = getProject(created.id, db);
+    expect(p).toBeUndefined();
+  });
+
+  it('should throw on duplicate path', () => {
+    const db = getInMemoryDb();
+    createProject({ name: 'First', path: '/same' }, db);
+    expect(() => createProject({ name: 'Second', path: '/same' }, db)).toThrow();
   });
 });
