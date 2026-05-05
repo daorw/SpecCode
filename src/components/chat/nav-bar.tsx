@@ -34,8 +34,8 @@ export function NavBar({
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   const openSettings = useCallback(async () => {
-    const { SettingsDialog, ProvidersModelsTab, ApiKeysTab, ProxyTab } = await import('@mariozechner/pi-web-ui');
-    SettingsDialog.open([new ProvidersModelsTab(), new ApiKeysTab(), new ProxyTab()]);
+    const { SettingsDialog, ProvidersModelsTab, ProxyTab } = await import('@mariozechner/pi-web-ui');
+    SettingsDialog.open([new ProvidersModelsTab(), new ProxyTab()]);
   }, []);
 
   const handleAdd = async () => {
