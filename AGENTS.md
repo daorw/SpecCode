@@ -176,7 +176,7 @@ document.body.appendChild(chatPanel);
   - `feature-test.md` — 测试规范、覆盖率要求与 mock 策略
   - `test-driven-development.md` — 通用 TDD 工作流（Red-Green-Refactor 循环）
   - `documents-update.md` — 文档同步更新规则（REQUIREMENTS.md / AGENTS.md / todo/）
-- `todo/` — 待完善工作清单。每个 todo 一个 Markdown 文件，描述待解决的问题和方案。
+- `todo/` — 待完善工作清单。每个 todo 一个 Markdown 文件，描述待解决的问题和方案。`README.md` 为索引文件，包含所有 todo 的状态、优先级排序、详细评估和依赖关系图。**todo 状态有变化时（如 pending → done），必须同步更新 `README.md` 索引表中的状态字段**。
 
 开发新能力时，优先考虑写入 `.agents/` 而非硬编码到 `src/lib/agent/`。
 
@@ -199,5 +199,6 @@ bun start            # 生产启动
 
 - 完整需求规格：`REQUIREMENTS.md`
 - Agent 内置资源：`.agents/skills/`、`.agents/tools/`、`.agents/workflows/`
+- TODO 索引与评估：`.agents/todo/README.md` — 包含所有 todo 的状态、优先级、可行性评估和依赖关系图
 - pi-agent-core 完整 API：https://github.com/badlogic/pi-mono/blob/main/packages/agent/README.md
 - pi-web-ui 完整 API：https://github.com/badlogic/pi-mono/blob/main/packages/web-ui/README.md
