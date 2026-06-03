@@ -69,6 +69,7 @@ Agent 在收到以下类型的用户请求时，必须先加载对应的工作�
 | 新增功能、实现需求、扩展模块 | feature-develop | `.agents/workflows/feature-develop.md` |
 | 调试 bug、定位报错、排查异常 | feature-debug | `.agents/workflows/feature-debug.md` |
 | 编写测试、运行测试、覆盖率 | feature-test | `.agents/workflows/feature-test.md` |
+| TDD 开发（Red-Green-Refactor） | test-driven-development | `.agents/workflows/test-driven-development.md` |
 | 任何功能变更完成后 | documents-update | `.agents/workflows/documents-update.md` |
 
 每个工作流文件包含：适用场景、标准化步骤、自检清单、交付标准。
@@ -161,8 +162,9 @@ document.body.appendChild(chatPanel);
 
 `.agents/` 存放 speccode Agent 的内置资源，是 Agent 能力扩展的核心目录：
 
-- `skills/` — Agent 内置技能。每个技能一个文件，定义 Agent 可执行的特定任务：
-  - `grill-me.md` — 递进式需求确认对话技能
+- `skills/` — Agent 内置技能。每个技能一个子目录，包含 `SKILL.md` 定义：
+  - `grill-me/` — 递进式需求确认对话技能
+  - `project-context-loader/` — 项目上下文加载器（自动检测/生成 AGENTS.md）
 - `tools/` — Agent 内置工具。Agent 可调用的工具函数定义（对应 pi-agent-core 的 `AgentTool`）：
   - `read_requirements` — 读取需求文档
   - `update_requirements` — 增量写入需求点
@@ -172,6 +174,7 @@ document.body.appendChild(chatPanel);
   - `feature-develop.md` — 新增功能、实现需求的标准流程
   - `feature-debug.md` — 缺陷定位与修复的系统化流程
   - `feature-test.md` — 测试规范、覆盖率要求与 mock 策略
+  - `test-driven-development.md` — 通用 TDD 工作流（Red-Green-Refactor 循环）
   - `documents-update.md` — 文档同步更新规则（REQUIREMENTS.md / AGENTS.md / todo/）
 - `todo/` — 待完善工作清单。每个 todo 一个 Markdown 文件，描述待解决的问题和方案。
 

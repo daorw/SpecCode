@@ -88,7 +88,7 @@ Storage
 ```
 speccode/
 ├── .agents/                  # Built-in Agent resources
-│   ├── skills/               #   Skills (grill-me)
+│   ├── skills/               #   Skills (grill-me, project-context-loader)
 │   ├── tools/                #   Tool definitions
 │   ├── workflows/            #   Workflows (dev/debug/test/docs)
 │   └── todo/                 #   Pending improvement tasks
