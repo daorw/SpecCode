@@ -136,11 +136,16 @@ V1 仅包含三项核心功能：
 speccode/
 ├── .agents/                  # 内置 Agent 资源
 │   ├── skills/               # 内置技能
-│   │   └── grill-me.md       # 递进式需求确认对话技能
+│   │   ├── grill-me/         # 递进式需求确认对话技能
+│   │   └── project-context-loader/  # 项目上下文加载器
 │   ├── tools/                # 内置工具
 │   │   └── README.md         # 工具说明
 │   └── workflows/            # 内置工作流
-│       └── README.md         # 工作流说明
+│       ├── feature-develop.md      # 功能开发流程
+│       ├── feature-debug.md        # 缺陷调试流程
+│       ├── feature-test.md         # 测试规范流程
+│       ├── test-driven-development.md  # TDD 工作流
+│       └── documents-update.md     # 文档更新流程
 ├── src/
 │   ├── __tests__/            # 测试
 │   │   ├── agent/            # Agent 相关测试
